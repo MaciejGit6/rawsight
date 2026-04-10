@@ -5,10 +5,14 @@
 typedef struct{
     uint16_t src_port;
     uint16_t
+
+
     uint32_t
     uint32_t 
+
     uint8_t data_offset;
     uint8_t flags;
+    
     uint16_t window;
     uint16_t checksum;
     uint16_t urgent;

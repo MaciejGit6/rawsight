@@ -11,6 +11,7 @@
 
 
 typedef struct{
+    
     uint8_t dst[ETH_ALEN];
     uint8_t src[ETH_ALEN];
     uint16_t ethertype;

@@ -6,23 +6,23 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-
-
 #define MAX_EVENTS  10
 #define BUFFER_SIZE 65536
 
-
 int open_raw_socket(const char* iface) {
-    (void)iface;
     int sock = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
     if (sock < 0) {
         perror("[-] socket() failed - are you running as root?");
         return -1;
+
     }
+
     return sock;
 }
 
 void capture_loop(int sock, PacketCallback cb) {
+
+    
     int epfd = epoll_create1(0);
     struct epoll_event ev, events[MAX_EVENTS];
 
@@ -33,6 +33,7 @@ void capture_loop(int sock, PacketCallback cb) {
     uint8_t buffer[BUFFER_SIZE];
 
     printf("[*] Capturing... Press Ctrl+C to stop.\n\n");
+
 
     while (1) {
         int n = epoll_wait(epfd, events, MAX_EVENTS, -1);

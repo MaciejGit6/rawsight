@@ -1,5 +1,6 @@
 #include "capture.h"
 #include <stdio.h>
+
 #include <sys/socket.h>
 #include <sys/epoll.h>
 #include <net/ethernet.h>
@@ -19,16 +20,21 @@ int open_raw_socket(const char* iface) {
         perror("[-] socket() failed - are you running as root?");
         return -1;
     }
+
+
     return sock;
 }
+
 
 void capture_loop(int sock, PacketCallback cb) {
     int epfd = epoll_create1(0);
     struct epoll_event ev, events[MAX_EVENTS];
 
     ev.events  = EPOLLIN;
-    ev.data.fd = sock;
+     ev.data.fd = sock;
     epoll_ctl(epfd, EPOLL_CTL_ADD, sock, &ev);
+
+
 
     uint8_t buffer[BUFFER_SIZE];
 
