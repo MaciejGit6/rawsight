@@ -6,6 +6,15 @@
 
 #include <iostream>
 #include <cstring>
+#include <getopt.h>
+#include "config.h"
+
+static void print_usage(const char* prog) {
+    fprintf(stderr, "Usage: %s -i <iface> [-n <count>] [-p <proto>]\n", prog);
+    fprintf(stderr, "  -i  network interface (e.g. eth0, lo)\n");
+    fprintf(stderr, "  -n  stop after N packets (default: unlimited)\n");
+    fprintf(stderr, "  -p  protocol filter: tcp, udp, icmp, arp (default: all)\n");
+}
 
 static Filter g_filter;
 
@@ -18,9 +27,21 @@ extern "C" void packet_receiver(const uint8_t* buf, ssize_t len) {
 
 
 int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cerr << "usage: sudo ./rawsight <interface>\n";
-        std::cerr << "       ./rawsight --file <capture.pcap>\n";
+    CaptureConfig cfg = { nullptr, 0, nullptr };
+
+    int opt;
+    while ((opt = getopt(argc, argv, "i:n:p:")) != -1) {
+        switch (opt) {
+            case 'i': cfg.iface        = optarg;       break;
+            case 'n': cfg.max_packets  = atoi(optarg); break;
+            case 'p': cfg.proto_filter = optarg;       break;
+            default:  print_usage(argv[0]); return 1;
+        }
+    }
+
+    if (!cfg.iface) {
+        fprintf(stderr, "[-] Interface is required.\n");
+        print_usage(argv[0]);
         return 1;
     }
 
