@@ -85,7 +85,7 @@ void capture_loop(int sock, PacketCallback cb) {
     printf("\n[*] Shutting down. \n");
     close(epfd);
 
-    close(epfd);
+    
 }
 
 
