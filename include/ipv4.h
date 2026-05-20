@@ -1,6 +1,13 @@
 #pragma once
 #include <stdint.h>
+#include <stddef.h>
+#include <sys/types.h>
+#include <netinet/in.h> 
+//netinet -> INET_ADDRSTRLEN
 
+const uint8_t* parse_ipv4(const uint8_t* buf, size_t len,
+                           char* src_ip, char* dst_ip,
+                           uint8_t* protocol);
 
 typedef struct {
     uint8_t ihl_version;
