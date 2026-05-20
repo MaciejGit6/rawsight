@@ -4,11 +4,11 @@
 
 typedef struct{
     uint16_t src_port;
-    uint16_t
+    uint16_t dst_port;
 
 
-    uint32_t
-    uint32_t 
+    uint32_t seq;
+    uint32_t ack;
 
     uint8_t data_offset;
     uint8_t flags;

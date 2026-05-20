@@ -17,6 +17,6 @@ typedef struct {
     
     uint32_t src;
     uint32_t dst;
-}__atribute__((packed)) ipv4_header_t;
+}__attribute__((packed)) ipv4_header_t;
 
 #define IPV4_IHL_BYTES(hdr) (((hdr)->ihl_version & 0x0F)*4)

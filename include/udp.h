@@ -8,6 +8,6 @@ typedef struct{
     uint16_t length;
     uint16_t checksum;
 
-}--attribute--((packed)) udp_header_t;
+}__attribute__((packed)) udp_header_t;
 
 #endif

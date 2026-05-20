@@ -1,5 +1,5 @@
 #pragma once 
-#include <stdin.h.
+#include <stdint.h>
 
 #define ETHERNETYPE_IPV4 0x0800
 #define ETHERNETYPE_IPV6 0x86DD
