@@ -7,11 +7,8 @@ struct Packet {
     std::string dst_mac;
     std::string src_ip;
     std::string dst_ip;
-
-
-    uint8_t     protocol;
-    uint16_t    src_port;
-    uint16_t    dst_port;
-    
-    size_t      length;
+    uint8_t     protocol  = 0;
+    uint16_t    src_port  = 0;
+    uint16_t    dst_port  = 0;
+    size_t      length    = 0;
 };

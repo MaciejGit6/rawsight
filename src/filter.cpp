@@ -1,10 +1,14 @@
-#include "display.hpp"
-#include <iostream>
+#include "filter.hpp"
+#include <cstring>
 
-void Display::print_banner() {
-    std::cout << "\n  rawsight v0.1 - raw packet dissector\n\n";
-}
+bool Filter::matches(const Packet& p) const {
+    if (m_tcp_only && p.protocol != 6 /*IPPROTO_TCP*/) return false;
+    if (m_udp_only && p.protocol != 17 /*IPPROTO_UDP*/) return false;
 
-void Display::print_packet(const Packet& p) {
-    (void)p;
+    if (!m_target_ip.empty()) {
+        if (p.src_ip != m_target_ip && p.dst_ip != m_target_ip)
+            return false;
+    }
+
+    return true;
 }
