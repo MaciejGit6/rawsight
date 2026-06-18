@@ -8,6 +8,7 @@
 #include <string.h>
 #include <netinet/in.h>
 #include "coap.h"
+#include <stdio.h>
 
 int dissect_packet(const uint8_t* buf, ssize_t len, DissectedPacket* out) {
     if (!buf || len <= 0 || !out) return 0;
@@ -45,6 +46,8 @@ int dissect_packet(const uint8_t* buf, ssize_t len, DissectedPacket* out) {
             if(out->src_port == COAP_PORT || out->dst_port == COAP_PORT){
                 if(l4_len > 8)
                     dissect_coap(l4 + 8, l4_len - 8);
+            }else if(out->src_port == COAPS_PORT || out->dst_port == COAPS_PORT){
+                printf(" [DTLS] encrypted CoAP(coaps)\n");
             }
             break;
 
