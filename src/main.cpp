@@ -34,12 +34,13 @@ extern "C" void packet_receiver(const uint8_t* buf, ssize_t len) {
     Packet p;
     p.src_mac  = dp.src_mac;
     p.dst_mac  = dp.dst_mac;
-    p.src_ip   = dp.src_ip;
-    p.dst_ip   = dp.dst_ip;
+    p.src_ip = dp.src_ip;
+    p.dst_ip = dp.dst_ip;
     p.protocol = dp.protocol;
     p.src_port = dp.src_port;
     p.dst_port = dp.dst_port;
-    p.length   = dp.length;
+    p.length = dp.length;
+    p.info = dp.info;
 
     if (!g_filter.matches(p)) return;
 
@@ -52,19 +53,19 @@ extern "C" void packet_receiver(const uint8_t* buf, ssize_t len) {
 }
 
 int main(int argc, char* argv[]) {
-    const char* iface      = nullptr;
-    const char* pcap_file  = nullptr;
-    const char* proto      = nullptr;
-    int         max_pkts   = 0;
+    const char* iface = nullptr;
+    const char* pcap_file = nullptr;
+    const char* proto = nullptr;
+    int         max_pkts = 0;
 
     int opt;
     while ((opt = getopt(argc, argv, "i:r:n:p:f:")) != -1) {
         switch (opt) {
-            case 'i': iface     = optarg;        break;
-            case 'r': pcap_file = optarg;        break;
-            case 'n': max_pkts  = atoi(optarg);  break;
-            case 'p': proto     = optarg;        break;
-            case 'f': g_filter.set_ip(optarg);   break;
+            case 'i': iface = optarg; break;
+            case 'r': pcap_file = optarg; break;
+            case 'n': max_pkts = atoi(optarg); break;
+            case 'p': proto = optarg; break;
+            case 'f': g_filter.set_ip(optarg); break;
             default:  print_usage(argv[0]); return 1;
         }
     }
@@ -72,7 +73,7 @@ int main(int argc, char* argv[]) {
     if (proto) {
         if (strcmp(proto, "tcp")  == 0) g_filter.enable_tcp_only();
         else if (strcmp(proto, "udp") == 0) g_filter.enable_udp_only();
-        // icmp handled at dissector level
+        //icmp handled at dissector level
     }
 
     g_max = max_pkts;

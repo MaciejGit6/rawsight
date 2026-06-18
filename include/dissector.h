@@ -18,6 +18,7 @@ typedef struct {
     uint16_t src_port;
     uint16_t dst_port;
     size_t   length;
+    char info[256]; //description from CoAP/DTLS dissector
 } DissectedPacket;
 
 /*Returns 1 on success 0 if the frame was too short or unsupported*/

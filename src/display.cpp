@@ -55,4 +55,6 @@ void Display::print_packet(const Packet& p) {
                p.src_ip.c_str(), p.dst_ip.c_str(),
                p.length);
     }
+    if(!p.info.empty())
+        printf("%s\n",p.info.cstr());
 }

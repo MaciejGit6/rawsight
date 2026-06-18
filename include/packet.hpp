@@ -11,4 +11,5 @@ struct Packet {
     uint16_t    src_port  = 0;
     uint16_t    dst_port  = 0;
     size_t      length    = 0;
+    std::string info;
 };
