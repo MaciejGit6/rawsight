@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#define COAP_OPT_URI_PATH 11
+
+
 static const char* coap_type(uint8_t t){
     switch(t){
         case 0: return "CON";
@@ -29,6 +32,23 @@ static const char* coap_code_name(uint8_t code){
         default: return NULL;
 
     }
+}
+
+static int coap_ext(uint8_t nibble, const uint8_t** pp, const uint8_t* end){
+    if(nibble < 13) return nibble;
+    if(nibble == 13){
+        if(*pp >= end)return -1;
+        int v = **pp + 13;
+        (*pp)++;
+        return v;
+    }
+    if(nibble == 14){
+        if(end - *pp < 2) return -1;
+        int v = ((*pp)[0] << 8 | (*pp)[1]) + 269;
+        *pp += 2;
+        return v;
+    }
+    return -1;
 }
 
 void dissect_coap(const uint8_t* payload, size_t len){
@@ -59,5 +79,38 @@ void dissect_coap(const uint8_t* payload, size_t len){
         printf("  [CoAP] %s %u.%02u MID=%u tkl=%u\n",
                coap_type(type), cls, det, mid, tkl);
     }
+
+    const uint8_t* p = payload + 4 + tkl;
+    const uint8_t* end = payload + len;
+    if(p > end) return;
+
+    char path[256]; path[0] = '\0';
+    int opt_num = 0;
+
+    while (p < end){
+        if(*p == 0xFF) break;
+        uint8_t d = *p >> 4;
+        uint8_t l = *p & 0x0F;
+        p++;
+
+        int delta = coap_ext(d, &p, end);
+        int olen = coap_ext(l, &p, end);
+        if(delta < 0 || olen < 0) break;
+        if(p + olen > end) break;
+
+        opt_nun += delta;
+        if(opt_num == COAP_OPT_URI_PATH){
+            size_t u = strlen(path);
+            if(u+1 + (size_t)olen + 1 < sizeof(path)){
+                patch[u] = '/';
+                memcpy(path + u + 1, p, olen);
+                path[u + 1 + olen] = '\0';
+
+            }
+        }
+        p += olen;
+    }
+
+    if(path[0])printf(" Uri-Path: %s\n",path);
 }
 
