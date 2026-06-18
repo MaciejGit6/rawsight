@@ -104,7 +104,7 @@ void dissect_coap(const uint8_t* payload, size_t len){
         if(opt_num == COAP_OPT_URI_PATH){
             size_t u = strlen(path);
             if(u+1 + (size_t)olen + 1 < sizeof(path)){
-                patch[u] = '/';
+                path[u] = '/';
                 memcpy(path + u + 1, p, olen);
                 path[u + 1 + olen] = '\0';
 
