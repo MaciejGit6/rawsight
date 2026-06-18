@@ -30,13 +30,13 @@ void dissect_arp(const uint8_t* payload, size_t len) {
     inet_ntop(AF_INET, arp->tpa, tpa, sizeof(tpa));
 
     if (op == ARPOP_REQUEST) {
-        printf("  [ARP] Who has %s? Tell %s\n", tpa, spa);
+        snprintf(info, info_len, "  [ARP] Who has %s? Tell %s\n", tpa, spa);
     } else if (op == ARPOP_REPLY) {
-        printf("  [ARP] %s is at %02x:%02x:%02x:%02x:%02x:%02x\n",
+        snprintf(info, info_len, "  [ARP] %s is at %02x:%02x:%02x:%02x:%02x:%02x\n",
                spa,
                arp->sha[0], arp->sha[1], arp->sha[2],
                arp->sha[3], arp->sha[4], arp->sha[5]);
     } else {
-        printf("  [ARP] op=%u %s -> %s\n", op, spa, tpa);
+        snprintf(info, info_len, "  [ARP] op=%u %s -> %s\n", op, spa, tpa);
     }
 }

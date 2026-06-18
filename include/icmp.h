@@ -2,4 +2,5 @@
 #include <stdint.h>
 #include <stddef.h>
 
-void dissect_icmp(const uint8_t* payload, size_t len);
+void dissect_icmp(const uint8_t* payload, size_t len, char* info,
+    size_t info_len);

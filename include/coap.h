@@ -9,4 +9,4 @@
 //used when HTTP is too heavy 
 //Coaps = COAP over DTLS (coap but secure)
 
-void dissect_coap(const uint8_t* payload, size_t len);
+void dissect_coap(const uint8_t* payload, size_t len, char* info, size_t info_len);

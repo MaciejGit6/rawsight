@@ -19,6 +19,6 @@ void dissect_icmp(const uint8_t* payload, size_t len) {
         case ICMP_TIME_EXCEEDED: type_str = "Time Exceeded";   break;
     }
 
-    printf("  [ICMP] type=%u (%s) code=%u\n",
+    snprintf(info, info_len, "  [ICMP] type=%u (%s) code=%u\n",
            hdr->type, type_str, hdr->code);
 }

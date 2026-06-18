@@ -25,7 +25,7 @@ int dissect_packet(const uint8_t* buf, ssize_t len, DissectedPacket* out) {
 
     if (ethertype == ETHERTYPE_ARP) {
         out->protocol = 0;   //sentinel for ARP
-        dissect_arp(payload, payload_len);
+        dissect_arp(payload, payload_len, out->info, sizeof(out->info));
         return 1;
     }
 
@@ -45,14 +45,14 @@ int dissect_packet(const uint8_t* buf, ssize_t len, DissectedPacket* out) {
             parse_udp(l4, l4_len, &out->src_port, &out->dst_port);
             if(out->src_port == COAP_PORT || out->dst_port == COAP_PORT){
                 if(l4_len > 8)
-                    dissect_coap(l4 + 8, l4_len - 8);
+                    dissect_coap(l4 + 8, l4_len - 8, out->info, sizeof(out->info));
             }else if(out->src_port == COAPS_PORT || out->dst_port == COAPS_PORT){
-                printf(" [DTLS] encrypted CoAP(coaps)\n");
+                snprintf(out->info, sizeof(out->info), " [DTLS] encrypted CoAP(coaps)\n");
             }
             break;
 
         case IPPROTO_ICMP:
-            dissect_icmp(l4, l4_len);
+            dissect_icmp(l4, l4_len, out->info, sizeof(out->info));
             break;
     }
 

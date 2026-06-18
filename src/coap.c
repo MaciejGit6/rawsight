@@ -52,9 +52,9 @@ static int coap_ext(uint8_t nibble, const uint8_t** pp, const uint8_t* end){
     return -1;
 }
 
-void dissect_coap(const uint8_t* payload, size_t len){
+void dissect_coap(const uint8_t* payload, size_t len, cahr* info, size_t info_len){
     if(len<4){
-        printf(" [CoAP] truncated\n");
+        snprintf(info, info_len," [CoAP] truncated\n");
         return;
     }
     uint8_t ver = (payload[0] >> 6) & 0x03;
@@ -64,7 +64,7 @@ void dissect_coap(const uint8_t* payload, size_t len){
     uint16_t mid = (payload[2] << 8) | payload[3];
 
     if(ver != 1){
-        printf(" [CoAP] bad version %u\n", ver);
+        snprintf(info, info_len, " [CoAP] bad version %u\n", ver);
         return;
     }
 
@@ -72,14 +72,17 @@ void dissect_coap(const uint8_t* payload, size_t len){
     uint8_t det = code & 0x1F;
     const char* name = coap_code_name(code);
 
+    int n;
     if(name){
-        printf(" [CoAP] %s %u.%02u (%s) MID=%u tkl=%d\n",
+        n = snprintf(info, info_len, " [CoAP] %s %u.%02u (%s) MID=%u tkl=%d\n",
             coap_type(type), cls, det, name, mid, tkl);
         
     }else{
-        printf("  [CoAP] %s %u.%02u MID=%u tkl=%u\n",
+        n =snprintf(info, info_len, "  [CoAP] %s %u.%02u MID=%u tkl=%u\n",
                coap_type(type), cls, det, mid, tkl);
     }
+    if(n < 0)return;
+    size_t off = (size_t)n;
 
     const uint8_t* p = payload + 4 + tkl;
     const uint8_t* end = payload + len;
@@ -121,7 +124,8 @@ void dissect_coap(const uint8_t* payload, size_t len){
         p += olen;
     }
 
-    if(path[0])printf("\tUri-Path: %s\n",path);
-    if(query[0])printf("\tUri-Query: %s\n", query);
+    if(path[0] && off< info_len)
+        off += (size_t)snprintf(info + off, info_len - off"\tUri-Path: %s\n",path);
+    if(query[0] && off < info_len - off)snprintf(info + off, info_len - off, "\tUri-Query: %s\n", query);
 }
 
