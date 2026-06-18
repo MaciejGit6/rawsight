@@ -100,7 +100,7 @@ void dissect_coap(const uint8_t* payload, size_t len){
         if(delta < 0 || olen < 0) break;
         if(p + olen > end) break;
 
-        opt_nun += delta;
+        opt_num += delta;
         if(opt_num == COAP_OPT_URI_PATH){
             size_t u = strlen(path);
             if(u+1 + (size_t)olen + 1 < sizeof(path)){
@@ -110,7 +110,7 @@ void dissect_coap(const uint8_t* payload, size_t len){
 
             }
         }else if(opt_num == COAP_OPT_URI_QUERY){
-            size_T u = strlen(query);
+            size_t u = strlen(query);
             const char* sep = (u == 0) ? "" : "&";
             if(u + strlen(sep) + (size_t)olen + 1 < sizeof(query)){
                 memcpy(query + u, sep, strlen(sep));
