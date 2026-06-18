@@ -14,6 +14,7 @@ set(C_SOURCES
     src/udp.c
     src/arp.c
     src/icmp.c
+    src/coap.c
     src/dissector.c
     src/pcap_reader.c
     src/pcap_writer.c

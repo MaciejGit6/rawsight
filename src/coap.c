@@ -1,5 +1,6 @@
 #include "coap.h"
 #include <stdio.h>
+#include <string.h>
 
 static const char* coap_type(uint8_t t){
     switch(t){
@@ -19,7 +20,7 @@ static const char* coap_code_name(uint8_t code){
         case 0x02: return "POST";
         case 0x03: return "PUT";
         case 0x04: return "DELETE";
-        case 0x41: return "Created":
+        case 0x41: return "Created";
         case 0x44: return "Changed";
         case 0x45: return "Content";
         case 0x80: return "Bad Requst";
@@ -47,7 +48,7 @@ void dissect_coap(const uint8_t* payload, size_t len){
     }
 
     uint8_t cls = code >> 5;
-    uint8_t = code & 0x1F;
+    uint8_t det = code & 0x1F;
     const char* name = coap_code_name(code);
 
     if(name){
