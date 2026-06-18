@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define COAP_OPT_URI_PATH 11
+#define COAP_OPT_URI_QUERY 15
 
 
 static const char* coap_type(uint8_t t){
@@ -85,6 +86,7 @@ void dissect_coap(const uint8_t* payload, size_t len){
     if(p > end) return;
 
     char path[256]; path[0] = '\0';
+    char query[256]; query[0] = '\0';
     int opt_num = 0;
 
     while (p < end){
@@ -107,10 +109,19 @@ void dissect_coap(const uint8_t* payload, size_t len){
                 path[u + 1 + olen] = '\0';
 
             }
+        }else if(opt_num == COAP_OPT_URI_QUERY){
+            size_T u = strlen(query);
+            const char* sep = (u == 0) ? "" : "&";
+            if(u + strlen(sep) + (size_t)olen + 1 < sizeof(query)){
+                memcpy(query + u, sep, strlen(sep));
+                memcpy(query + u + strlen(sep), p, olen);
+                query[u + strlen(sep) + olen] = '\0';
+            }
         }
         p += olen;
     }
 
-    if(path[0])printf(" Uri-Path: %s\n",path);
+    if(path[0])printf("\tUri-Path: %s\n",path);
+    if(query[0])printf("\tUri-Query: %s\n", query);
 }
 
