@@ -4,9 +4,9 @@
 #include <sys/types.h>
 
 
-#define ETHERNETYPE_IPV4 0x0800
-#define ETHERNETYPE_IPV6 0x86DD
-#define ETHERNETYPE_ARP 0x0806
+#define ETHERTYPE_IPV4 0x0800
+#define ETHERTYPE_IPV6 0x86DD
+#define ETHERTYPE_ARP 0x0806
 
 
 #define ETH_ALEN 6

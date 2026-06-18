@@ -8,6 +8,7 @@
 #include <iostream>
 #include <cstring>
 #include <getopt.h>
+#include <csignal>
 #include "config.h"
 
 static Filter  g_filter;
@@ -46,7 +47,6 @@ extern "C" void packet_receiver(const uint8_t* buf, ssize_t len) {
     ++g_count;
 
     if (g_max > 0 && g_count >= g_max) {
-        // raise SIGINT to trigger graceful shutdown
         raise(SIGINT);
     }
 }

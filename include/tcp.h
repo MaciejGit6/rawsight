@@ -1,6 +1,7 @@
 #ifndef TCP_H
 #define TCP_H
 #include <stdint.h>
+#include <stddef.h>
 
 typedef struct{
     uint16_t src_port;
@@ -25,3 +26,8 @@ typedef struct{
 #define TCP_FLAG_ACK 0x10
 #define TCP_FLAG_FIN 0x01
 #define TCP_FLAG_RST 0x04
+
+const uint8_t* parse_tcp(const uint8_t* buf, size_t len,
+                         uint16_t* src_port, uint16_t* dst_port);
+
+#endif
