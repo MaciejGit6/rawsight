@@ -7,6 +7,7 @@
 #include "arp.h"
 #include <string.h>
 #include <netinet/in.h>
+#include "coap.h"
 
 int dissect_packet(const uint8_t* buf, ssize_t len, DissectedPacket* out) {
     if (!buf || len <= 0 || !out) return 0;
@@ -41,7 +42,12 @@ int dissect_packet(const uint8_t* buf, ssize_t len, DissectedPacket* out) {
             break;
         case IPPROTO_UDP:
             parse_udp(l4, l4_len, &out->src_port, &out->dst_port);
+            if(out->src_port == COAP_PORT || out->dst_port == COAP_PORT){
+                if(l4_len > 8)
+                    dissect_coap(l4 + 8, l4_len - 8);
+            }
             break;
+
         case IPPROTO_ICMP:
             dissect_icmp(l4, l4_len);
             break;
