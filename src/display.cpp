@@ -56,5 +56,5 @@ void Display::print_packet(const Packet& p) {
                p.length);
     }
     if(!p.info.empty())
-        printf("%s\n",p.info.cstr());
+        printf("%s\n",p.info.c_str());
 }

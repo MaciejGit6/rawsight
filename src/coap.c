@@ -52,7 +52,7 @@ static int coap_ext(uint8_t nibble, const uint8_t** pp, const uint8_t* end){
     return -1;
 }
 
-void dissect_coap(const uint8_t* payload, size_t len, cahr* info, size_t info_len){
+void dissect_coap(const uint8_t* payload, size_t len, char* info, size_t info_len){
     if(len<4){
         snprintf(info, info_len," [CoAP] truncated\n");
         return;
@@ -125,7 +125,7 @@ void dissect_coap(const uint8_t* payload, size_t len, cahr* info, size_t info_le
     }
 
     if(path[0] && off< info_len)
-        off += (size_t)snprintf(info + off, info_len - off"\tUri-Path: %s\n",path);
+        off += (size_t)snprintf(info + off, info_len - off,"\tUri-Path: %s\n",path);
     if(query[0] && off < info_len - off)snprintf(info + off, info_len - off, "\tUri-Query: %s\n", query);
 }
 

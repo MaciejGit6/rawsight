@@ -2,9 +2,9 @@
 #include <netinet/ip_icmp.h>
 #include <stdio.h>
 
-void dissect_icmp(const uint8_t* payload, size_t len) {
+void dissect_icmp(const uint8_t* payload, size_t len, char* info, size_t info_len) {
     if (len < sizeof(struct icmphdr)) {
-        printf("  [ICMP] truncated\n");
+        snprintf(info, info_len, "  [ICMP] truncated\n");
         return;
     }
 
