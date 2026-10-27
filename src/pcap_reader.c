@@ -62,8 +62,8 @@ int read_pcap_file(const char* filepath, PacketCallback cb) {
         if (phdr.incl_len > 65536) break;
         if (fread(buf, 1, phdr.incl_len, f) != phdr.incl_len) break;
 
-        if (cb != NULL) cb(buf, (ssize_t)phdr.incl_len);
         count++;
+        if (cb != NULL && cb(buf, (ssize_t)phdr.incl_len) == 0) break;
     }
 
 

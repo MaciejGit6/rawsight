@@ -77,7 +77,10 @@ void capture_loop(int sock, PacketCallback cb) {
             if (events[i].data.fd == sock) {
                 ssize_t len = recv(sock, buffer, BUFFER_SIZE, 0);
                 if (len > 0 && cb != NULL) {
-                    cb(buffer, len);
+                    if (cb(buffer, len) == 0) {
+                        g_running = 0;
+                        break;
+                    }
                 }
             }
         }

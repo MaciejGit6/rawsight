@@ -10,7 +10,8 @@ extern "C" {
 
 
 
-typedef void (*PacketCallback)(const uint8_t* buf, ssize_t len);
+/* Return 1 to keep capturing, 0 to stop the capture/read loop. */
+typedef int (*PacketCallback)(const uint8_t* buf, ssize_t len);
 
 int  open_raw_socket(const char* iface);
 void capture_loop(int sock, PacketCallback cb);

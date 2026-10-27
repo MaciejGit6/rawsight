@@ -8,7 +8,6 @@
 #include <iostream>
 #include <cstring>
 #include <getopt.h>
-#include <csignal>
 #include "config.h"
 
 static Filter  g_filter;
@@ -27,9 +26,9 @@ static void print_usage(const char* prog) {
         prog, prog);
 }
 
-extern "C" void packet_receiver(const uint8_t* buf, ssize_t len) {
+extern "C" int packet_receiver(const uint8_t* buf, ssize_t len) {
     DissectedPacket dp;
-    if (!dissect_packet(buf, len, &dp)) return;
+    if (!dissect_packet(buf, len, &dp)) return 1;
 
     Packet p;
     p.src_mac  = dp.src_mac;
@@ -42,14 +41,13 @@ extern "C" void packet_receiver(const uint8_t* buf, ssize_t len) {
     p.length = dp.length;
     p.info = dp.info;
 
-    if (!g_filter.matches(p)) return;
+    if (!g_filter.matches(p)) return 1;
 
     Display::print_packet(p);
     ++g_count;
 
-    if (g_max > 0 && g_count >= g_max) {
-        raise(SIGINT);
-    }
+    if (g_max > 0 && g_count >= g_max) return 0;
+    return 1;
 }
 
 int main(int argc, char* argv[]) {
