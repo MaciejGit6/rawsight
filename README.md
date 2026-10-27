@@ -17,3 +17,9 @@ and the bytes.
 are handled by a C++ engine. STL containers manage captured packet 
 history cleanly and RAII ensures no buffer leaks when the capture 
 session ends.
+
+**Moonlit Notes
+currently the program recognizes and dissects:
+Network Layer (4): UDP, TCP
+Presentation Layer (5): DTLS
+Application Layer (7): CoAP
