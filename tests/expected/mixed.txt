@@ -1,0 +1,21 @@
+
+  rawsight v0.1 - raw packet dissector
+
+[+] pcap file opened. link type: 1
+
+[UDP] 10.0.0.1:40000 -> 10.0.0.2:5683  (52 bytes)
+ [CoAP] CON 0.01 (GET) MID=4660 tkl=0
+	Uri-Path: /3/0/1
+
+[ARP] 11:22:33:44:55:66 -> aa:bb:cc:dd:ee:ff
+  [ARP] Who has 10.0.0.2? Tell 10.0.0.1
+
+[ICMP] 10.0.0.1 -> 8.8.8.8  (42 bytes)
+  [ICMP] type=8 (Echo Request) code=0
+
+[UDP] 10.0.0.1:50000 -> 10.0.0.2:5684  (65 bytes)
+ [DTLS] encrypted CoAP(coaps)
+
+[TCP] 10.0.0.1:45000 -> 10.0.0.2:443  (54 bytes)
+
+[+] done. 5 packets processed.

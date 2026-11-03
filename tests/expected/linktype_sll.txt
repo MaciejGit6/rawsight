@@ -1,0 +1,4 @@
+
+  rawsight v0.1 - raw packet dissector
+
+[-] unsupported link type 113 (only ethernet is supported)

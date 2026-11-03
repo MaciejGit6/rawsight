@@ -1,0 +1,10 @@
+
+  rawsight v0.1 - raw packet dissector
+
+[+] pcap file opened. link type: 1
+
+[ICMP] 10.0.0.1 -> 8.8.8.8  (42 bytes)
+  [ICMP] type=8 (Echo Request) code=0
+
+
+[+] done. 5 packets processed.

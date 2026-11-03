@@ -1,0 +1,8 @@
+[-] Unknown protocol filter: foo
+Usage: rawsight -i <iface> [-n <count>] [-p tcp|udp|icmp] [-f <ip>]
+       rawsight -r <file.pcap>
+  -i  live interface (e.g. eth0)
+  -r  read from pcap file instead of live capture
+  -n  stop after N packets
+  -p  protocol filter: tcp, udp, icmp
+  -f  filter by IP address

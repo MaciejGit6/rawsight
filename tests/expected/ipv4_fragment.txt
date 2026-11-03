@@ -1,0 +1,10 @@
+
+  rawsight v0.1 - raw packet dissector
+
+[+] pcap file opened. link type: 1
+
+[UDP] 10.0.0.1:0 -> 10.0.0.2:0  (54 bytes)
+  [IPv4] fragment
+
+
+[+] done. 1 packets processed.

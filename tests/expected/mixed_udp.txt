@@ -1,0 +1,14 @@
+
+  rawsight v0.1 - raw packet dissector
+
+[+] pcap file opened. link type: 1
+
+[UDP] 10.0.0.1:40000 -> 10.0.0.2:5683  (52 bytes)
+ [CoAP] CON 0.01 (GET) MID=4660 tkl=0
+	Uri-Path: /3/0/1
+
+[UDP] 10.0.0.1:50000 -> 10.0.0.2:5684  (65 bytes)
+ [DTLS] encrypted CoAP(coaps)
+
+
+[+] done. 5 packets processed.
