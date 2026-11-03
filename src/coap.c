@@ -101,7 +101,7 @@ void dissect_coap(const uint8_t* payload, size_t len, char* info, size_t info_le
         int delta = coap_ext(d, &p, end);
         int olen = coap_ext(l, &p, end);
         if(delta < 0 || olen < 0) break;
-        if(p + olen > end) break;
+        if(olen > end - p) break;
 
         opt_num += delta;
         if(opt_num == COAP_OPT_URI_PATH){
@@ -124,8 +124,16 @@ void dissect_coap(const uint8_t* payload, size_t len, char* info, size_t info_le
         p += olen;
     }
 
-    if(path[0] && off< info_len)
-        off += (size_t)snprintf(info + off, info_len - off,"\tUri-Path: %s\n",path);
-    if(query[0] && off < info_len - off)snprintf(info + off, info_len - off, "\tUri-Query: %s\n", query);
+    // snprintf returns the length it *would* have written, so clamp off
+    // to info_len or the next write goes past the end of the buffer
+    if(off >= info_len) return;
+    if(path[0]){
+        n = snprintf(info + off, info_len - off, "\tUri-Path: %s\n", path);
+        if(n < 0) return;
+        off += (size_t)n;
+        if(off >= info_len) return;
+    }
+    if(query[0])
+        snprintf(info + off, info_len - off, "\tUri-Query: %s\n", query);
 }
 
