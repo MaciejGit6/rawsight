@@ -71,7 +71,12 @@ int main(int argc, char* argv[]) {
     if (proto) {
         if (strcmp(proto, "tcp")  == 0) g_filter.enable_tcp_only();
         else if (strcmp(proto, "udp") == 0) g_filter.enable_udp_only();
-        //icmp handled at dissector level
+        else if (strcmp(proto, "icmp") == 0) g_filter.enable_icmp_only();
+        else {
+            fprintf(stderr, "[-] Unknown protocol filter: %s\n", proto);
+            print_usage(argv[0]);
+            return 1;
+        }
     }
 
     g_max = max_pkts;
