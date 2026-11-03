@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(C_SOURCES
-    src/capture.c       # capture.cpp is a stale duplicate, delete it
+    src/capture.c
     src/ethernet.c
     src/ipv4.c
     src/tcp.c
@@ -22,7 +22,6 @@ set(C_SOURCES
 
 set(CXX_SOURCES
     src/main.cpp
-    src/packet.cpp
     src/filter.cpp
     src/display.cpp
 )

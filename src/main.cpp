@@ -8,7 +8,6 @@
 #include <iostream>
 #include <cstring>
 #include <getopt.h>
-#include "config.h"
 
 static Filter  g_filter;
 static int     g_count     = 0;

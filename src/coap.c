@@ -27,7 +27,7 @@ static const char* coap_code_name(uint8_t code){
         case 0x41: return "Created";
         case 0x44: return "Changed";
         case 0x45: return "Content";
-        case 0x80: return "Bad Requst";
+        case 0x80: return "Bad Request";
         case 0x84: return "Not Found";
         case 0xa0: return "Internal Error";
         default: return NULL;
