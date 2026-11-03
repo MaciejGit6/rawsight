@@ -5,6 +5,9 @@
 
 #define PCAP_MAGIC      0xa1b2c3d4
 #define PCAP_MAGIC_SWAP 0xd4c3b2a1
+#define PCAP_MAGIC_NS      0xa1b23c4d   // nanosecond timestamps
+#define PCAP_MAGIC_NS_SWAP 0x4d3cb2a1
+#define PCAP_LINKTYPE_EN10MB 1
 
 typedef struct {
     uint32_t magic;
@@ -31,6 +34,11 @@ typedef struct {
 } pcap_packet_header_t;
 
 
+// file was written on a machine with the other byte order
+static uint32_t maybe_swap32(uint32_t v, int swap) {
+    return swap ? __builtin_bswap32(v) : v;
+}
+
 int read_pcap_file(const char* filepath, PacketCallback cb) {
     FILE* f = fopen(filepath, "rb");
     if (!f) {
@@ -45,9 +53,21 @@ int read_pcap_file(const char* filepath, PacketCallback cb) {
         return -1;
     }
 
-    if (fhdr.magic != PCAP_MAGIC && fhdr.magic != PCAP_MAGIC_SWAP) {
-        
+    int swap;
+    if (fhdr.magic == PCAP_MAGIC || fhdr.magic == PCAP_MAGIC_NS) {
+        swap = 0;
+    } else if (fhdr.magic == PCAP_MAGIC_SWAP || fhdr.magic == PCAP_MAGIC_NS_SWAP) {
+        swap = 1;
+    } else {
         printf("[-] not a valid pcap file (magic: 0x%x)\n", fhdr.magic);
+        fclose(f);
+        return -1;
+    }
+    fhdr.network = maybe_swap32(fhdr.network, swap);
+
+    // the dissector assumes every frame starts with an ethernet header
+    if (fhdr.network != PCAP_LINKTYPE_EN10MB) {
+        printf("[-] unsupported link type %u (only ethernet is supported)\n", fhdr.network);
         fclose(f);
         return -1;
     }
@@ -55,10 +75,15 @@ int read_pcap_file(const char* filepath, PacketCallback cb) {
     printf("[+] pcap file opened. link type: %u\n\n", fhdr.network);
 
     uint8_t* buf = malloc(65536);
+    if (!buf) {
+        fclose(f);
+        return -1;
+    }
     pcap_packet_header_t phdr;
     int count = 0;
 
     while (fread(&phdr, sizeof(phdr), 1, f) == 1) {
+        phdr.incl_len = maybe_swap32(phdr.incl_len, swap);
         if (phdr.incl_len > 65536) break;
         if (fread(buf, 1, phdr.incl_len, f) != phdr.incl_len) break;
 
