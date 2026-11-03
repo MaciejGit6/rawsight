@@ -7,7 +7,7 @@
 
 const uint8_t* parse_ipv4(const uint8_t* buf, size_t len,
                            char* src_ip, char* dst_ip,
-                           uint8_t* protocol);
+                           uint8_t* protocol, size_t* l4_len);
 
 typedef struct {
     uint8_t ihl_version;
@@ -27,3 +27,6 @@ typedef struct {
 }__attribute__((packed)) ipv4_header_t;
 
 #define IPV4_IHL_BYTES(hdr) (((hdr)->ihl_version & 0x0F)*4)
+#define IPV4_FRAG_OFFSET_MASK 0x1FFF
+
+int ipv4_is_later_fragment(const uint8_t* buf);

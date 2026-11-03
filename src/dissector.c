@@ -31,11 +31,15 @@ int dissect_packet(const uint8_t* buf, ssize_t len, DissectedPacket* out) {
 
     if (ethertype != ETHERTYPE_IPV4) return 0;  //skipping IPv6 for  now
 
+    size_t l4_len = 0;
     const uint8_t* l4 = parse_ipv4(payload, payload_len,
                                     out->src_ip, out->dst_ip,
-                                    &out->protocol);
+                                    &out->protocol, &l4_len);
     if (!l4) return 0;
-    size_t l4_len = payload_len - (size_t)(l4 - payload);
+    if (ipv4_is_later_fragment(payload)) {
+        snprintf(out->info, sizeof(out->info), "  [IPv4] fragment\n");
+        return 1;
+    }
 
     switch (out->protocol) {
         case IPPROTO_TCP:
