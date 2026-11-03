@@ -31,4 +31,12 @@ add_executable(rawsight ${C_SOURCES} ${CXX_SOURCES})
 
 target_compile_options(rawsight PRIVATE -Wall -Wextra -g -O0)
 
+option(RAWSIGHT_SANITIZE "build with AddressSanitizer + UBSan" OFF)
+if(RAWSIGHT_SANITIZE)
+    set(SAN_FLAGS -fsanitize=address,undefined -fno-sanitize-recover=undefined
+                  -fno-omit-frame-pointer)
+    target_compile_options(rawsight PRIVATE ${SAN_FLAGS})
+    target_link_options(rawsight PRIVATE ${SAN_FLAGS})
+endif()
+
 target_include_directories(rawsight PRIVATE ${CMAKE_SOURCE_DIR}/include)
