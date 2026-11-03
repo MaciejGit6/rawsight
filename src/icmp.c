@@ -1,6 +1,7 @@
 #include "icmp.h"
 #include <netinet/ip_icmp.h>
 #include <stdio.h>
+#include <string.h>
 
 void dissect_icmp(const uint8_t* payload, size_t len, char* info, size_t info_len) {
     if (len < sizeof(struct icmphdr)) {
@@ -8,7 +9,11 @@ void dissect_icmp(const uint8_t* payload, size_t len, char* info, size_t info_le
         return;
     }
 
-    const struct icmphdr* hdr = (const struct icmphdr*)payload;
+    // struct icmphdr isn't packed and needs 4-byte alignment, but after the
+    // 14-byte ethernet header the payload usually isn't aligned - copy it out
+    struct icmphdr icmp;
+    memcpy(&icmp, payload, sizeof(icmp));
+    const struct icmphdr* hdr = &icmp;
 
     
     const char* type_str = "unknown";
